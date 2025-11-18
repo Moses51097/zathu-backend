@@ -2,7 +2,7 @@
 require 'config.php'; // DB + PayChangu keys
 
 header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: *"); // allow InfinityFree frontend
+header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 
@@ -10,10 +10,15 @@ header("Access-Control-Allow-Headers: Content-Type");
 $data = json_decode(file_get_contents("php://input"), true);
 $amount = floatval($data['amount'] ?? 0);
 $user_id = intval($data['user_id'] ?? 0);
-$user_name = $data['user_name'] ?? "User";
+$user_name = trim($data['user_name'] ?? "");
 
 if($user_id <= 0){
     echo json_encode(["status"=>"error","message"=>"Invalid user ID"]);
+    exit;
+}
+
+if(strlen($user_name) < 2){
+    echo json_encode(["status"=>"error","message"=>"Invalid user name"]);
     exit;
 }
 
@@ -22,7 +27,7 @@ if($amount < 50 || $amount > 500000000){
     exit;
 }
 
-// Generate transaction reference
+// Transaction reference
 $tx_ref = "ZATHTR_" . time() . "_" . $user_id;
 
 // Insert pending transaction
@@ -50,7 +55,7 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     "Accept: application/json",
-    "Authorization: Bearer $PAYCHANGU_SECRET_KEY",
+    "Authorization: Bearer " . getenv('PAYCHANGU_SECRET_KEY'),
     "Content-Type: application/json"
 ]);
 
