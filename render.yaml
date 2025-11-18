@@ -1,9 +1,7 @@
 services:
   - type: web
     name: zathu-backend
-    env: docker
-    dockerfilePath: ./Dockerfile
+    env: php
     plan: free
-    branch: main
-    autopublish: true
-    healthCheckPath: /
+    buildCommand: ""
+    startCommand: "php -S 0.0.0.0:10000"
