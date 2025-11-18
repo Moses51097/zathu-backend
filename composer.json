@@ -1,0 +1,8 @@
+{
+  "name": "zathu/backend",
+  "description": "Backend for ZathuTrade",
+  "type": "project",
+  "require": {
+    "php": "^8.0"
+  }
+}
