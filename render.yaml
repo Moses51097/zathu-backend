@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: zathu-backend
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    branch: main
+    autopublish: true
+    healthCheckPath: /
